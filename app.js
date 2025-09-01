@@ -278,7 +278,28 @@ import { default as wasm, Mnist } from "../pkg/browser_models.js";
 class ModelInferenceApp {
     constructor() {
         this.initializeElements();
-        this.initializeImageProcessor();
+        
+        if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+            const startButton = document.createElement('button');
+            startButton.textContent = 'Tap to Enable WebGPU';
+            startButton.style.cssText = 'background: #007AFF; color: white; border: none; padding: 12px 20px; border-radius: 6px; font-size: 16px; margin: 10px; width: calc(100% - 20px);';
+            startButton.onclick = async () => {
+                try {
+                    // This triggers WebGPU initialization with user gesture
+                    const adapter = await navigator.gpu.requestAdapter();
+                    const device = await adapter.requestDevice();
+                    device.destroy(); // Just testing
+                    startButton.remove();
+                    console.log('WebGPU ready on mobile!');
+                } catch (e) {
+                    console.error('WebGPU failed:', e);
+                    startButton.textContent = 'WebGPU Failed - Try Again';
+                }
+            };
+            this.elements.uploadArea.parentNode.insertBefore(startButton, this.elements.uploadArea);
+        }
+
+	this.initializeImageProcessor();
         this.initializeThreeJS();
         this.bindEvents();
         this.loadModel();
