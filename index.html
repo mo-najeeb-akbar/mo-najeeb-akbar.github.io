@@ -171,7 +171,12 @@
             </div>
             <button id="run-btn" disabled>Run Inference</button>
         </div>
-        
+       	<div id="webgpu-log"></div>
+    
+    	<script type="module">
+        	import { logWebGPUSupport } from './webgpu-logger.js';
+        	logWebGPUSupport(); // uses default 'webgpu-log' id
+    	</script> 
         <div id="status" class="status" style="display: none;"></div>
         
         <div class="progress-container" id="progress" style="display: none;">
