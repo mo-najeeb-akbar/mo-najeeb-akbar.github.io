@@ -1,7 +1,3 @@
-/**
- * Minimal optical profilometry defect detection app
- */
-
 import { default as wasm, Mnist } from "../pkg/browser_models.js";
 
 class ImageProcessor {
@@ -159,6 +155,7 @@ class App {
             runBtn: document.getElementById('run-btn'),
             fileInput: document.getElementById('file-input'),
             uploadArea: document.getElementById('upload-area'),
+            fileIndicator: document.getElementById('file-indicator'),
             demoSelect: document.getElementById('demo-select'),
             progressDiv: document.getElementById('progress'),
             progressFill: document.getElementById('progress-fill'),
@@ -397,6 +394,9 @@ class App {
         if (!file.name.toLowerCase().endsWith('.datx')) return;
         
         try {
+            // Reset demo select when uploading a file
+            this.elements.demoSelect.value = '';
+            
             const arrayBuffer = await file.arrayBuffer();
             const success = await this.imageProcessor.loadDATXFile(arrayBuffer);
             
@@ -414,8 +414,17 @@ class App {
         this.differenceData = null;
         this.elements.percentileControls.style.display = 'none';
         
+        // Show file loaded indicator
+        this.elements.uploadArea.classList.add('loaded');
+        this.elements.fileIndicator.classList.add('active');
+        
         this.imageProcessor.displayIntensity(this.elements.intensityCanvas);
         this.createSurfaceVisualization();
+        
+        // Force a render to make the point cloud visible immediately
+        if (this.renderer && this.camera && this.scene) {
+            this.renderer.render(this.scene, this.camera);
+        }
     }
 
     createSurfaceVisualization() {

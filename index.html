@@ -76,6 +76,20 @@
             border-color: #007bff; 
             background: rgba(70,70,70,0.5);
         }
+        .upload-area.loaded {
+            border-color: #4caf50;
+            background: rgba(76,175,80,0.2);
+        }
+        .file-loaded-indicator {
+            display: none;
+            color: #4caf50;
+            font-size: 11px;
+            margin-top: 4px;
+            font-weight: bold;
+        }
+        .file-loaded-indicator.active {
+            display: block;
+        }
         select, button {
             width: 100%;
             padding: 8px 12px;
@@ -257,6 +271,7 @@
                 📁 Upload DATX
                 <input type="file" id="file-input" accept=".datx" style="display: none;">
             </div>
+            <div class="file-loaded-indicator" id="file-indicator">✓ File loaded</div>
         </div>
 
         <div class="control-group">
